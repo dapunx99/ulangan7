@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Informatika Kelas 7 - SMP (TP 2026/2027)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        academic: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-academic-200 selection:text-academic-900">
+
+    <!-- ==================== HEADER UTAMA ==================== -->
+    <header class="bg-gradient-to-r from-academic-900 via-academic-800 to-blue-900 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo & Judul -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-laptop-code text-xl text-indigo-200"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm sm:text-base tracking-tight leading-tight">INFORMATIKA KELAS 7</h1>
+                    <p class="text-[11px] sm:text-xs text-indigo-200 font-medium">Sekolah Menengah Pertama • Tahun Ajaran 2026–2027</p>
+                </div>
+            </div>
+
+            <!-- Kanan Header: Timer (saat ujian) & Pengaturan Guru -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Timer Badge -->
+                <div id="header-timer" class="hidden items-center space-x-2 bg-white/15 border border-white/20 px-3 py-1.5 rounded-xl font-mono text-sm sm:text-base font-semibold shadow-sm">
+                    <i class="fa-regular fa-clock text-amber-300 animate-pulse"></i>
+                    <span id="timer-display">60:00</span>
+                </div>
+
+                <!-- Status Koneksi Spreadsheet -->
+                <div id="webhook-status-badge" class="hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-white/10 border border-white/15">
+                    <span id="webhook-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="webhook-status-text">Mode Lokal</span>
+                </div>
+
+                <!-- Tombol Panel Guru / Pengaturan -->
+                <button onclick="openTeacherAuth()" title="Pengaturan & Rekap Nilai Guru" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition border border-white/15 text-white flex items-center space-x-1.5">
+                    <i class="fa-solid fa-gear text-sm sm:text-base"></i>
+                    <span class="hidden sm:inline text-xs font-semibold">Panel Guru</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== KONTEN UTAMA ==================== -->
+    <main class="flex-grow flex flex-col justify-center">
+
+        <!-- 1. HALAMAN LOGIN / IDENTITAS SISWA -->
+        <section id="view-login" class="max-w-2xl w-full mx-auto px-4 py-8 sm:py-12 fade-in">
+            <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 overflow-hidden">
+                <!-- Banner Atas Kartu -->
+                <div class="bg-gradient-to-r from-academic-600 to-blue-600 p-6 sm:p-8 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-semibold tracking-wider uppercase mb-2">
+                            Evaluasi &amp; Latihan Soal Digital
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Informatika Kelas 7</h2>
+                        <p class="text-indigo-100 text-sm mt-1">Tahun Ajaran 2026–2027 • 30 Soal Pilihan Ganda • Nilai Maksimal 100</p>
+                    </div>
+                    <i class="fa-solid fa-graduation-cap absolute -right-4 -bottom-6 text-8xl text-white/10 rotate-12"></i>
+                </div>
+
+                <!-- Form Identitas -->
+                <form id="login-form" onsubmit="startExam(event)" class="p-6 sm:p-8 space-y-5">
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start space-x-3 text-amber-900 text-xs sm:text-sm">
+                        <i class="fa-solid fa-circle-info text-amber-500 text-base mt-0.5"></i>
+                        <div>
+                            <p class="font-semibold">Petunjuk Pengerjaan:</p>
+                            <ul class="list-disc list-inside mt-1 space-y-0.5 text-amber-800">
+                                <li>Isi nama lengkap, nomor peserta/absen, dan pilih kelas (<strong>VII A – VII D</strong>).</li>
+                                <li>Waktu pengerjaan adalah <strong>60 menit</strong> untuk <strong>30 soal</strong> (Nilai Maksimal: 100).</li>
+                                <li>Baca setiap narasi soal, diagram flowchart, dan potongan pseudocode dengan teliti sebelum memilih jawaban.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="student-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap Siswa <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <input type="text" id="student-name" required placeholder="Contoh: Dimas Saputra Pratama"
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-academic-600 focus:ring-4 focus:ring-academic-600/10 outline-none transition text-sm sm:text-base font-medium">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="student-id" class="block text-sm font-semibold text-slate-700 mb-1.5">Nomor Peserta / Absen <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <i class="fa-solid fa-id-card"></i>
+                                    </span>
+                                    <input type="text" id="student-id" required placeholder="Contoh: 07 atau 26-07-001"
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-academic-600 focus:ring-4 focus:ring-academic-600/10 outline-none transition text-sm sm:text-base font-medium">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="student-class" class="block text-sm font-semibold text-slate-700 mb-1.5">Kelas <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <i class="fa-solid fa-users-rectangle"></i>
+                                    </span>
+                                    <select id="student-class" required
+                                        class="w-full pl-10 pr-8 py-3 rounded-xl border border-slate-300 focus:border-academic-600 focus:ring-4 focus:ring-academic-600/10 outline-none transition text-sm sm:text-base font-medium bg-white">
+                                        <option value="" disabled selected>-- Pilih Kelas --</option>
+                                        <option value="VII A">VII A</option>
+                                        <option value="VII B">VII B</option>
+                                        <option value="VII C">VII C</option>
+                                        <option value="VII D">VII D</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-academic-600 to-blue-600 hover:from-academic-700 hover:to-blue-700 text-white font-bold text-base shadow-lg shadow-academic-600/25 active:scale-[0.99] transition flex items-center justify-center space-x-2">
+                            <span>Mulai Mengerjakan Ujian</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- 2. ANTARMUKA UJIAN (CBT) -->
+        <section id="view-exam" class="hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 fade-in">
+            <!-- Info Bar Peserta -->
+            <div class="bg-white rounded-2xl border border-slate-200 px-4 py-3 mb-5 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-academic-100 text-academic-700 flex items-center justify-center font-bold text-sm" id="exam-avatar">
+                        S
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-800 text-sm sm:text-base leading-tight" id="exam-student-name">Nama Siswa</p>
+                        <p class="text-xs text-slate-500 font-medium">
+                            Kelas: <span id="exam-student-class" class="text-academic-700 font-semibold">VII A</span> • 
+                            No. Peserta: <span id="exam-student-id" class="font-mono text-slate-700">001</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 text-xs sm:text-sm">
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                        Dijawab: <span id="answered-count">0</span>/30
+                    </span>
+                </div>
+            </div>
+
+            <!-- Grid Utama: Kiri (Area Soal) & Kanan (Navigasi Nomor) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Kolom Kiri: Konten Soal -->
+                <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                    <!-- Header Nomor Soal -->
+                    <div class="bg-slate-50 border-b border-slate-200 px-5 sm:px-7 py-4 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="px-3 py-1 rounded-xl bg-academic-600 text-white font-bold text-sm shadow-sm">
+                                Soal No. <span id="current-q-num">1</span>
+                            </span>
+                            <span id="doubt-badge" class="hidden px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 border border-amber-300 text-xs font-semibold">
+                                <i class="fa-solid fa-flag mr-1"></i>Ragu-ragu
+                            </span>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-200/70 text-slate-600">
+                            Pilihan Ganda
+                        </span>
+                    </div>
+
+                    <!-- Isi Pertanyaan & Diagram/Visual -->
+                    <div class="p-5 sm:p-7 flex-grow space-y-5">
+                        <div id="question-text" class="text-slate-800 text-base sm:text-lg font-medium leading-relaxed">
+                            <!-- Teks pertanyaan dirender di sini -->
+                        </div>
+
+                        <!-- Kontainer Visual / Flowchart / Pseudocode -->
+                        <div id="question-media" class="hidden overflow-x-auto">
+                            <!-- Media dirender di sini -->
+                        </div>
+
+                        <!-- Pilihan Jawaban A, B, C, D -->
+                        <div id="options-container" class="space-y-3 pt-2">
+                            <!-- Opsi dirender via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Footer Navigasi Soal -->
+                    <div class="bg-slate-50 border-t border-slate-200 px-5 sm:px-7 py-4 flex flex-wrap items-center justify-between gap-3">
+                        <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-semibold text-sm transition flex items-center space-x-2 disabled:opacity-40 disabled:pointer-events-none">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            <span>Sebelumnya</span>
+                        </button>
+
+                        <button id="btn-doubt" onclick="toggleDoubt()" class="px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-800 font-semibold text-sm transition flex items-center space-x-2">
+                            <i class="fa-regular fa-flag"></i>
+                            <span>Ragu-ragu</span>
+                        </button>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2.5 rounded-xl bg-academic-600 hover:bg-academic-700 text-white font-semibold text-sm shadow-sm transition flex items-center space-x-2">
+                            <span>Selanjutnya</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button id="btn-finish" onclick="confirmFinishExam()" class="hidden px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Selesai &amp; Kirim Jawaban</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Navigasi Nomor Soal -->
+                <div class="lg:col-span-4 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 sticky top-20">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center space-x-2">
+                            <i class="fa-solid fa-grip text-academic-600"></i>
+                            <span>Navigasi Nomor Soal</span>
+                        </h3>
+                        <span class="text-xs text-slate-500 font-medium">30 Soal</span>
+                    </div>
+
+                    <!-- Grid 30 Nomor -->
+                    <div id="question-nav-grid" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-2 mb-5">
+                        <!-- Tombol 1-30 dirender via JS -->
+                    </div>
+
+                    <!-- Legenda Warna -->
+                    <div class="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-600">
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-emerald-500 inline-block"></span>
+                                <span>Sudah Dijawab</span>
+                            </span>
+                            <span class="font-bold text-slate-800" id="legend-answered">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-amber-400 inline-block"></span>
+                                <span>Ragu-ragu</span>
+                            </span>
+                            <span class="font-bold text-slate-800" id="legend-doubt">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-slate-100 border border-slate-300 inline-block"></span>
+                                <span>Belum Dijawab</span>
+                            </span>
+                            <span class="font-bold text-slate-800" id="legend-unanswered">30</span>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Selesai Cepat di Panel Samping -->
+                    <button onclick="confirmFinishExam()" class="mt-5 w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm transition flex items-center justify-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-check-double text-emerald-400"></i>
+                        <span>Kumpulkan Ujian Sekarang</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. HALAMAN HASIL & PENGIRIMAN KE SPREADSHEET -->
+        <section id="view-result" class="hidden max-w-4xl w-full mx-auto px-4 py-8 sm:py-10 fade-in">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                <!-- Header Hasil -->
+                <div class="bg-gradient-to-br from-academic-800 via-academic-700 to-blue-700 p-6 sm:p-8 text-white text-center relative">
+                    <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                        <i class="fa-solid fa-award text-3xl text-amber-300"></i>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold">Ujian Telah Selesai!</h2>
+                    <p class="text-indigo-100 text-sm mt-1">PSAS Informatika Kelas 7 • Tahun Ajaran 2026–2027</p>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Status Pengiriman Google Spreadsheet -->
+                    <div id="sync-status-box" class="rounded-2xl p-4 border flex items-center justify-between gap-3 bg-blue-50 border-blue-200 text-blue-900">
+                        <div class="flex items-center space-x-3">
+                            <i id="sync-icon" class="fa-solid fa-spinner fa-spin text-xl text-blue-600"></i>
+                            <div>
+                                <p id="sync-title" class="font-bold text-sm">Mengirim hasil ke Google Spreadsheet...</p>
+                                <p id="sync-desc" class="text-xs opacity-85 mt-0.5">Mohon tunggu sebentar, jangan tutup halaman ini.</p>
+                            </div>
+                        </div>
+                        <button id="btn-retry-sync" onclick="retrySendToSpreadsheet()" class="hidden px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0 shadow-xs">
+                            Kirim Ulang ke Spreadsheet
+                        </button>
+                    </div>
+
+                    <!-- Kartu Nilai Utama -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Jawaban Benar</p>
+                            <p class="text-3xl font-extrabold text-emerald-600 mt-1" id="res-correct">0</p>
+                            <p class="text-xs text-slate-400 mt-0.5">dari 30 soal</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Jawaban Salah</p>
+                            <p class="text-3xl font-extrabold text-rose-500 mt-1" id="res-wrong">0</p>
+                            <p class="text-xs text-slate-400 mt-0.5">soal tidak tepat</p>
+                        </div>
+                        <div class="bg-academic-50 border-2 border-academic-500 rounded-2xl p-4 shadow-sm">
+                            <p class="text-xs font-bold text-academic-700 uppercase tracking-wider">Nilai Akhir</p>
+                            <p class="text-4xl font-black text-academic-700 mt-0.5" id="res-score">0</p>
+                            <p class="text-xs text-academic-600 font-medium mt-0.5">Skala Maksimal 100</p>
+                        </div>
+                    </div>
+
+                    <!-- Detail Identitas Siswa -->
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 sm:p-5 space-y-2.5 text-sm">
+                        <div class="flex justify-between py-1 border-b border-slate-200/70">
+                            <span class="text-slate-500">Nama Lengkap</span>
+                            <span class="font-bold text-slate-800" id="res-name">-</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-200/70">
+                            <span class="text-slate-500">Nomor Peserta / Absen</span>
+                            <span class="font-mono font-semibold text-slate-800" id="res-id">-</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-200/70">
+                            <span class="text-slate-500">Kelas</span>
+                            <span class="font-bold text-academic-700" id="res-class">-</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-500">Waktu Selesai</span>
+                            <span class="font-medium text-slate-700" id="res-timestamp">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Rincian Status Jawaban Siswa (1 - 30) -->
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+                        <button type="button" onclick="toggleReviewSection()" class="w-full bg-slate-100 hover:bg-slate-200/70 px-5 py-3.5 flex items-center justify-between text-left transition">
+                            <span class="font-bold text-slate-800 text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-list-check text-academic-600"></i>
+                                <span>Lihat Ringkasan &amp; Status Jawaban Kamu (Soal 1–30)</span>
+                            </span>
+                            <i id="review-chevron" class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform"></i>
+                        </button>
+                        <div id="review-answers-container" class="hidden p-4 sm:p-5 bg-white max-h-96 overflow-y-auto divide-y divide-slate-100 text-xs sm:text-sm">
+                            <!-- Diisi otomatis via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Cadangan CSV & Kembali -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button onclick="downloadSingleResultCSV()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-file-csv text-base"></i>
+                            <span>Unduh Bukti/Hasil CSV</span>
+                        </button>
+                        <button onclick="resetToLogin()" class="py-3 px-5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Selesai &amp; Keluar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>&copy; 2026 Informatika SMP • Sistem Evaluasi Digital Berbasis Web (CBT)</p>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL KONFIRMASI SELESAI UJIAN ==================== -->
+    <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 fade-in">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-slate-800">Konfirmasi Pengumpulan Ujian</h3>
+            <p id="confirm-message" class="text-sm text-slate-600 mt-2 leading-relaxed">
+                Apakah kamu yakin ingin menyelesaikan ujian dan mengirim jawaban sekarang?
+            </p>
+            <div class="mt-6 flex items-center justify-end space-x-3">
+                <button onclick="closeConfirmModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">
+                    Periksa Lagi
+                </button>
+                <button onclick="finishExam()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition">
+                    Ya, Kirim Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PIN GURU ==================== -->
+    <div id="modal-teacher-pin" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-academic-100 text-academic-700 flex items-center justify-center">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">Akses Panel Guru</h3>
+                        <p class="text-xs text-slate-500">Masukkan PIN (Default: 1234)</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherPinModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="verifyTeacherPin(event)" class="space-y-4">
+                <input type="password" id="teacher-pin-input" maxlength="8" placeholder="••••" required
+                    class="w-full text-center tracking-[0.5em] font-mono text-xl py-3 rounded-xl border border-slate-300 focus:border-academic-600 focus:ring-4 focus:ring-academic-600/10 outline-none">
+                <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-semibold text-center">PIN salah! Gunakan PIN default: 1234</p>
+                <button type="submit" class="w-full py-3 rounded-xl bg-academic-600 hover:bg-academic-700 text-white font-bold text-sm transition">
+                    Masuk ke Dashboard Guru
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DASHBOARD & PENGATURAN GURU ==================== -->
+    <div id="modal-teacher-panel" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden fade-in">
+            <!-- Header Panel Guru -->
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-400 text-xl"></i>
+                    <div>
+                        <h3 class="font-bold text-base sm:text-lg">Dashboard Guru &amp; Integrasi Google Spreadsheet</h3>
+                        <p class="text-xs text-slate-400">Kelola Webhook Google Sheets, Panduan Apps Script, &amp; Rekap Nilai Kelas VII</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherPanel()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Tabs Navigasi -->
+            <div class="bg-slate-100 px-6 pt-3 border-b border-slate-200 flex space-x-2 shrink-0 overflow-x-auto">
+                <button onclick="switchTeacherTab('tab-webhook')" id="btn-tab-webhook" class="px-4 py-2.5 rounded-t-xl font-bold text-xs sm:text-sm bg-white text-academic-700 border-t border-x border-slate-200">
+                    <i class="fa-solid fa-link mr-1.5"></i>Pengaturan Spreadsheet
+                </button>
+                <button onclick="switchTeacherTab('tab-rekap')" id="btn-tab-rekap" class="px-4 py-2.5 rounded-t-xl font-semibold text-xs sm:text-sm text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-table mr-1.5"></i>Rekap Nilai Lokal (<span id="local-records-count">0</span>)
+                </button>
+                <button onclick="switchTeacherTab('tab-script')" id="btn-tab-script" class="px-4 py-2.5 rounded-t-xl font-semibold text-xs sm:text-sm text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-code mr-1.5"></i>Panduan &amp; Kode Apps Script
+                </button>
+            </div>
+
+            <!-- Isi Konten Modal Guru -->
+            <div class="p-6 overflow-y-auto flex-grow space-y-6">
+
+                <!-- TAB 1: PENGATURAN WEBHOOK GOOGLE SPREADSHEET -->
+                <div id="tab-webhook" class="space-y-5">
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 text-sm text-indigo-900">
+                        <p class="font-bold flex items-center space-x-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-indigo-600"></i>
+                            <span>Koneksi Otomatis ke Google Sheets (Kompatibel Kelas 7, 8, dan 9)</span>
+                        </p>
+                        <p class="text-xs text-indigo-800 mt-1 leading-relaxed">
+                            Tempelkan <strong>URL Web App Google Apps Script</strong> di bawah ini agar setiap siswa kelas VII yang menekan tombol <em>"Selesai &amp; Kirim Jawaban"</em> datanya langsung masuk ke sheet <code>Rekap_PSAS</code> secara otomatis. Anda dapat menggunakan URL Web App yang sama dengan aplikasi Kelas 8 maupun Kelas 9.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-sm font-bold text-slate-700">URL Google Apps Script Web App</label>
+                        <input type="url" id="input-webhook-url" placeholder="https://script.google.com/macros/s/AKfycbx.../exec"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-academic-600 focus:ring-4 focus:ring-academic-600/10 outline-none font-mono text-xs sm:text-sm">
+                        <div class="flex flex-wrap gap-3 pt-1">
+                            <button onclick="saveWebhookUrl()" class="px-5 py-2.5 rounded-xl bg-academic-600 hover:bg-academic-700 text-white font-bold text-sm shadow-sm transition flex items-center space-x-2">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Simpan Pengaturan URL</span>
+                            </button>
+                            <button onclick="testWebhookConnection()" class="px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-semibold text-sm transition flex items-center space-x-2">
+                                <i class="fa-solid fa-vial"></i>
+                                <span>Tes Koneksi</span>
+                            </button>
+                            <button onclick="clearWebhookUrl()" class="px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-sm transition">
+                                Hapus URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="webhook-feedback" class="hidden rounded-xl p-3 text-xs font-semibold"></div>
+                </div>
+
+                <!-- TAB 2: REKAP NILAI LOKAL -->
+                <div id="tab-rekap" class="hidden space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base">Daftar Hasil Ujian Tersimpan di Perangkat Ini</h4>
+                            <p class="text-xs text-slate-500">Data otomatis dicadangkan di browser sebagai antisipasi jika koneksi internet terputus.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="exportAllResultsCSV()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span>Unduh Rekap CSV</span>
+                            </button>
+                            <button onclick="clearLocalResults()" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs transition">
+                                Bersihkan Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-2xl overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <th class="py-3 px-4 font-bold">Waktu</th>
+                                    <th class="py-3 px-4 font-bold">No. Peserta</th>
+                                    <th class="py-3 px-4 font-bold">Nama Siswa</th>
+                                    <th class="py-3 px-4 font-bold">Kelas</th>
+                                    <th class="py-3 px-4 font-bold text-center">Benar</th>
+                                    <th class="py-3 px-4 font-bold text-center">Nilai</th>
+                                    <th class="py-3 px-4 font-bold text-center">Status Sync</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rekap-table-body" class="divide-y divide-slate-200">
+                                <!-- Data baris dirender via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: PANDUAN & KODE GOOGLE APPS SCRIPT -->
+                <div id="tab-script" class="hidden space-y-4">
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
+                        <p class="font-bold">Kode Google Apps Script Terpadu (Kelas 7, 8, dan 9 dalam 1 Sheet):</p>
+                        <ol class="list-decimal list-inside space-y-1 text-amber-800">
+                            <li>Buka <strong>Google Sheets</strong> Anda &rarr; klik <strong>Ekstensi (Extensions) &rarr; Apps Script</strong>.</li>
+                            <li>Tempel kode di bawah ini (mendukung deteksi otomatis <strong>Kelas 7</strong>, <strong>Kelas 8</strong>, dan <strong>Kelas 9</strong> dalam satu sheet <code>Rekap_PSAS</code>).</li>
+                            <li>Klik <strong>Simpan</strong>, lalu <strong>Terapkan (Deploy) &rarr; Deployment baru &rarr; Aplikasi Web (Web App)</strong> dengan akses <strong>Siapa saja (Anyone)</strong>.</li>
+                            <li>Salin <strong>URL Web App</strong> dan tempelkan pada tab <em>Pengaturan Spreadsheet</em>.</li>
+                        </ol>
+                    </div>
+
+                    <div class="relative">
+                        <div class="flex items-center justify-between bg-slate-800 text-slate-200 px-4 py-2.5 rounded-t-2xl text-xs font-mono">
+                            <span>Code.gs (Google Apps Script Terpadu Kelas 7, 8, 9)</span>
+                            <button onclick="copyAppsScriptCode()" id="btn-copy-script" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-sans font-semibold transition flex items-center space-x-1.5">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Salin Kode</span>
+                            </button>
+                        </div>
+                        <textarea id="apps-script-code" readonly rows="16" class="w-full bg-slate-900 text-emerald-300 font-mono text-xs p-4 rounded-b-2xl outline-none resize-none leading-relaxed">const SHEET_NAME = "Rekap_PSAS";
+const TOTAL_QUESTIONS = 30;
+
+function doGet(e) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = getOrCreateSheet(ss, SHEET_NAME);
+    return jsonResponse({
+      status: "ok",
+      message: "Koneksi Google Apps Script berhasil.",
+      sheetName: sheet.getName(),
+      totalRows: Math.max(0, sheet.getLastRow() - 1)
+    });
+  } catch (err) {
+    return jsonResponse({ status: "error", message: err.message });
+  }
+}
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error("Payload POST kosong.");
+    }
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = getOrCreateSheet(ss, SHEET_NAME);
+
+    if (data.action === "test") {
+      return jsonResponse({ status: "ok", message: "Tes koneksi berhasil ke sheet: " + sheet.getName() });
+    }
+
+    const kelas = String(data.kelas || data.className || "").trim();
+    const jenjang = detectJenjang(data.jenjang || data.level || kelas);
+    const nama = String(data.namaSiswa || data.nama || data.name || "").trim();
+    const noPeserta = String(data.noPeserta || data.nomor || data.absen || "").trim();
+
+    const benar = Number(data.benar ?? data.correct ?? 0);
+    const salah = Number(data.salah ?? data.wrong ?? Math.max(0, TOTAL_QUESTIONS - benar));
+    const skorRaw = data.nilai !== undefined ? Number(data.nilai) : (benar / TOTAL_QUESTIONS) * 100;
+    const nilai = Math.min(100, Math.max(0, Math.round(skorRaw * 100) / 100));
+
+    const answersList = extractAnswersList(data);
+    const timestamp = data.timestamp || new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
+
+    const row = [timestamp, jenjang, kelas, noPeserta, nama, benar, salah, nilai].concat(answersList);
+    sheet.appendRow(row);
+
+    return jsonResponse({ status: "ok", message: "Data berhasil disimpan ke " + SHEET_NAME, jenjang: jenjang, kelas: kelas, nilai: nilai });
+  } catch (err) {
+    return jsonResponse({ status: "error", message: err.message });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getOrCreateSheet(ss, name) {
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) sheet = ss.insertSheet(name);
+  const headers = ["Waktu Kirim", "Jenjang", "Kelas", "No. Peserta", "Nama Siswa", "Benar", "Salah", "Nilai (Max 100)"];
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) headers.push("No. " + i);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold").setBackground("#e0e7ff");
+  }
+  return sheet;
+}
+
+function detectJenjang(rawValue) {
+  const val = String(rawValue || "").toUpperCase();
+  if (val.includes("VII") && !val.includes("VIII")) return "Kelas 7";
+  if (val.includes("7")) return "Kelas 7";
+  if (val.includes("VIII") || val.includes("8")) return "Kelas 8";
+  if (val.includes("IX") || val.includes("9")) return "Kelas 9";
+  return rawValue ? String(rawValue) : "-";
+}
+
+function extractAnswersList(data) {
+  const result = [];
+  const rawAnswers = data.detailJawaban || data.jawaban || data.answers || [];
+  for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+    let item = Array.isArray(rawAnswers) ? rawAnswers[i] : (rawAnswers[i + 1] ?? "");
+    if (Array.isArray(item)) item = item.join(", ");
+    result.push(item === undefined || item === null || item === "" ? "-" : String(item));
+  }
+  return result;
+}
+
+function jsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}</textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NOTIFIKASI TOAST ==================== -->
+    <div id="toast-box" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 text-xs sm:text-sm font-medium flex items-center space-x-2.5 fade-in">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-text">Pesan notifikasi</span>
+    </div>
+
+    <!-- ==================== LOGIKA JAVASCRIPT & BANK SOAL KELAS 7 ==================== -->
+    <script>
+        // Helper pembuat SVG Flowchart untuk Opsi Soal No. 13
+        function createFlowchartOptionSVG(step1Text, step2Text, step3Text) {
+            return `
+                <div class="inline-block bg-slate-50 border border-slate-200 rounded-xl p-2.5 my-1">
+                    <svg width="230" height="236" viewBox="0 0 230 236" class="max-w-full h-auto block">
+                        <defs>
+                            <marker id="arrow-opt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a"/>
+                            </marker>
+                        </defs>
+                        <!-- MULAI -->
+                        <rect x="65" y="6" width="100" height="30" rx="15" fill="#2b579a" stroke="#1e3a8a" stroke-width="1.5"/>
+                        <text x="115" y="25" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="700">MULAI</text>
+                        <line x1="115" y1="36" x2="115" y2="52" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arrow-opt)"/>
+
+                        <!-- STEP 1 (Jajar Genjang) -->
+                        <polygon points="35,54 205,54 195,86 25,86" fill="#2b579a" stroke="#1e3a8a" stroke-width="1.5"/>
+                        <text x="115" y="74" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="600">${step1Text}</text>
+                        <line x1="115" y1="86" x2="115" y2="102" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arrow-opt)"/>
+
+                        <!-- STEP 2 (Persegi Panjang Proses) -->
+                        <rect x="30" y="104" width="170" height="32" rx="3" fill="#2b579a" stroke="#1e3a8a" stroke-width="1.5"/>
+                        <text x="115" y="124" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="600">${step2Text}</text>
+                        <line x1="115" y1="136" x2="115" y2="152" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arrow-opt)"/>
+
+                        <!-- STEP 3 (Jajar Genjang) -->
+                        <polygon points="35,154 205,154 195,186 25,186" fill="#2b579a" stroke="#1e3a8a" stroke-width="1.5"/>
+                        <text x="115" y="174" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="600">${step3Text}</text>
+                        <line x1="115" y1="186" x2="115" y2="200" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arrow-opt)"/>
+
+                        <!-- SELESAI -->
+                        <rect x="65" y="202" width="100" height="30" rx="15" fill="#2b579a" stroke="#1e3a8a" stroke-width="1.5"/>
+                        <text x="115" y="221" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="700">SELESAI</text>
+                    </svg>
+                </div>
+            `;
+        }
+
+        // BANK SOAL LENGKAP 30 SOAL INFORMATIKA KELAS 7
+        const QUESTIONS = [
+            {
+                no: 1,
+                text: "Pengurus kelas akan mengadakan kegiatan bazar. Selama rapat, mereka mencatat banyak pekerjaan: menentukan daftar stan, mengatur meja, menyiapkan uang kembalian, membuat poster, menghubungi penjual, dan menyusun jadwal piket. Agar pekerjaan tidak menumpuk pada satu orang, ketua kelas ingin membagi masalah besar menjadi bagian-bagian yang lebih kecil dan dapat dikerjakan oleh kelompok berbeda.<br>Tindakan yang paling tepat untuk menerapkan <strong>dekomposisi</strong> adalah ....",
+                options: {
+                    A: "membagi pekerjaan menjadi kelompok logistik, publikasi, keuangan, dan acara",
+                    B: "meminta semua anggota mengerjakan seluruh tugas secara bersamaan dengan tertib dan teratur",
+                    C: "memilih warna poster sebelum mengetahui kebutuhan kegiatan",
+                    D: "menghapus beberapa pekerjaan agar rapat berlangsung lebih singkat"
+                },
+                answer: "A"
+            },
+            {
+                no: 2,
+                text: "Petugas perpustakaan mencatat jumlah buku yang dipinjam setiap hari selama satu minggu sekolah. Catatannya adalah Senin 18 buku, Selasa 22 buku, Rabu 18 buku, Kamis 22 buku, dan Jumat 18 buku. Ia ingin memperkirakan kecenderungan peminjaman dengan melihat kejadian yang berulang, bukan menebak berdasarkan satu hari saja.<br>Kesimpulan pola yang paling sesuai dengan data tersebut adalah ....",
+                options: {
+                    A: "jumlah peminjaman selalu bertambah empat buku setiap hari",
+                    B: "jumlah peminjaman selalu berkurang empat buku setiap hari",
+                    C: "jumlah peminjaman bergantian antara 18 dan 22 buku",
+                    D: "jumlah peminjaman tetap sama pada seluruh hari sekolah"
+                },
+                answer: "C"
+            },
+            {
+                no: 3,
+                text: "Kantin sekolah merencanakan aplikasi sederhana untuk mencatat pesanan. Setiap pesanan perlu memuat nama menu, jumlah porsi, harga satuan, dan waktu pengambilan. Pemilik kantin juga memiliki informasi lain seperti warna kesukaan pelanggan, merek sepatu, dan akun media sosial. Informasi tambahan itu tidak digunakan untuk menghitung atau menyiapkan pesanan.<br>Saat membuat model data pesanan, informasi yang sebaiknya dipertahankan melalui <strong>abstraksi</strong> adalah ....",
+                options: {
+                    A: "warna kesukaan, merek sepatu, dan akun media sosial siswa",
+                    B: "menu, jumlah porsi, harga satuan, dan waktu pengambilan",
+                    C: "nama teman, kelas pelanggan, dan jenis musik kesukaan siswa",
+                    D: "warna tas, ukuran sepatu, dan nama akun permainan"
+                },
+                answer: "B"
+            },
+            {
+                no: 4,
+                text: "Tim kelas akan mengirim 24 paket alat tulis ke enam ruang kelas. Setiap paket berisi jumlah barang yang sama. Petugas harus menghitung isi seluruh paket, memberi label tujuan pada setiap paket, lalu mencocokkan jumlah paket dengan daftar ruang kelas. Jika label dibuat sebelum tujuan diperiksa, paket berisiko tertukar. Tim ingin menyusun prosedur yang dapat diikuti anggota baru tanpa perlu menebak langkah berikutnya.<br>Urutan prosedur yang paling logis adalah ....",
+                options: {
+                    A: "memberi label acak, mengemas barang, lalu mencari daftar tujuan yang sesuai",
+                    B: "mengemas seluruh barang, membagi paket, lalu mengabaikan pemeriksaan tujuan",
+                    C: "membagikan paket dahulu, menulis label belakangan, lalu menghitung barang tersisa sehingga dapat menentukan dan jangan sampai tertinggal",
+                    D: "membaca daftar tujuan, membagi barang sama rata, mengemas, memberi label, lalu memeriksa jumlah paket"
+                },
+                answer: "D"
+            },
+            {
+                no: 5,
+                text: "Sekolah ingin mengurangi antrean peminjaman perangkat laboratorium. Saat ini siswa menulis nama pada kertas, tetapi beberapa tulisan sulit dibaca dan catatan sering terselip. Sekolah memiliki komputer di ruang laboratorium dan petugas yang dapat mengoperasikan spreadsheet. Solusi yang dipilih harus mudah digunakan serta tidak membutuhkan perangkat tambahan.<br>Solusi awal yang paling sesuai dengan batasan tersebut adalah ....",
+                options: {
+                    A: "membuat tabel peminjaman di spreadsheet dengan kolom identitas dan waktu",
+                    B: "membeli sistem pemindai otomatis tanpa memeriksa kebutuhan biaya dalam pembelian alat peraga",
+                    C: "mengganti pencatatan dengan pesan lisan yang tidak terdokumentasi dengan baik dan ingat",
+                    D: "mencatat peminjaman di beberapa kertas tanpa format yang sama"
+                },
+                answer: "A"
+            },
+            {
+                no: 6,
+                text: "Rani sering terlambat menyiapkan perlengkapan sekolah karena buku dan alat tulis baru dicari pada pagi hari. Ia kemudian mencoba membuat prosedur persiapan pada malam sebelumnya. Prosedur tersebut harus memastikan jadwal pelajaran diketahui, buku yang dibutuhkan dipilih, perlengkapan dimasukkan ke tas, dan tas diletakkan di tempat yang mudah ditemukan.<br>Langkah pertama yang paling tepat dalam <strong>algoritma</strong> persiapan tersebut adalah ....",
+                options: {
+                    A: "memasukkan semua buku ke tas tanpa melihat jadwal biar tidak ada yang tertinggal",
+                    B: "meletakkan tas di dekat pintu sebelum memilih perlengkapan sekolah",
+                    C: "memeriksa jadwal pelajaran untuk menentukan buku yang diperlukan",
+                    D: "mencari alat tulis ketika kegiatan belajar sudah dimulai"
+                },
+                answer: "C"
+            },
+            {
+                no: 7,
+                text: "Perpustakaan mengamati keterlambatan pengembalian buku selama empat pekan. Data keterlambatan adalah: pekan 1 sebanyak 12 buku, pekan 2 sebanyak 9 buku, pekan 3 sebanyak 12 buku, dan pekan 4 sebanyak 9 buku. Petugas juga mengetahui bahwa pengingat peminjaman dikirim setiap hari Jumat, tetapi belum ada pengingat menjelang hari pengembalian. Mereka ingin memperbaiki proses berdasarkan data yang tersedia.<br>Kesimpulan dan tindak lanjut yang paling dapat dipertanggungjawabkan adalah ....",
+                options: {
+                    A: "keterlambatan pasti terus menurun sehingga pengingat tidak perlu diubah dan sesuai yang diharapkan",
+                    B: "angka keterlambatan berulang pada dua nilai, sehingga waktu pengingat perlu dievaluasi dan diuji",
+                    C: "semua buku terlambat karena pengingat dikirim pada hari Jumat",
+                    D: "data membuktikan bahwa petugas harus menghapus aturan peminjaman"
+                },
+                answer: "B"
+            },
+            {
+                no: 8,
+                text: "Wakil ketua kelas menyusun jadwal penggunaan lapangan untuk empat kelompok olahraga. Jadwal perlu menghindari benturan waktu dan memperhatikan lama penggunaan setiap kelompok. Data warna seragam dan makanan favorit anggota tersedia, tetapi tidak memengaruhi penggunaan lapangan. Ia ingin membuat model jadwal yang ringkas dan mudah diperiksa.<br>Variabel yang paling penting dimasukkan ke dalam model jadwal adalah ....",
+                options: {
+                    A: "warna seragam, makanan favorit, dan nama panggilan anggota",
+                    B: "jenis musik, warna sepatu, dan jumlah pengikut media sosial",
+                    C: "merek botol minum, hobi anggota, dan warna tas olahraga",
+                    D: "nama kelompok, hari, waktu mulai, dan durasi penggunaan"
+                },
+                answer: "D"
+            },
+            {
+                no: 9,
+                text: "Sekolah memiliki 60 siswa yang akan mengikuti lokakarya komputer. Laboratorium menyediakan 30 komputer dan setiap komputer digunakan oleh satu siswa pada satu sesi. Panitia ingin setiap siswa memperoleh waktu praktik secara langsung, sehingga jumlah peserta per sesi tidak boleh melebihi jumlah komputer.<br>Rancangan yang memenuhi seluruh kebutuhan dan batasan kegiatan adalah ....",
+                options: {
+                    A: "membagi siswa menjadi dua kelompok berisi 30 orang dan menjalankan dua sesi praktik",
+                    B: "membagi siswa menjadi tiga kelompok dan menjalankan tiga sesi praktik",
+                    C: "menempatkan seluruh siswa dalam satu sesi agar kegiatan cepat selesai",
+                    D: "membuat dua kelompok berisi 40 orang dan 20 orang tanpa pembagian perangkat biar yang sesi kedua tidak banyak"
+                },
+                answer: "A"
+            },
+            {
+                no: 10,
+                text: "Dimas menggambar flowchart untuk prosedur menghidupkan komputer. Ia ingin menandai bagian yang menunjukkan awal proses dan bagian yang menandai bahwa semua langkah sudah selesai. Dalam standar flowchart dasar, simbol yang berbeda digunakan untuk proses, keputusan, masukan/keluaran, serta awal atau akhir.<br>Simbol yang digunakan untuk menandai awal dan akhir flowchart adalah ....",
+                options: {
+                    A: "process berbentuk persegi panjang biasa",
+                    B: "terminator berbentuk oval atau persegi panjang membulat",
+                    C: "decision berbentuk belah ketupat atau bentuk jajar genjang",
+                    D: "input/output berbentuk jajar genjang"
+                },
+                answer: "B"
+            },
+            {
+                no: 11,
+                text: "Sebuah flowchart penerimaan anggota klub memiliki aturan: jika formulir telah lengkap, data disimpan; jika belum lengkap, formulir dikembalikan untuk diperbaiki. Pada titik tertentu alur harus memilih satu dari dua cabang berdasarkan jawaban benar atau salah. Pembuat flowchart perlu memilih simbol yang menggambarkan pemeriksaan kondisi.<br>Simbol yang tepat untuk bagian pemeriksaan kelengkapan formulir adalah ....",
+                options: {
+                    A: "oval karena menandai awal atau akhir kegiatan",
+                    B: "persegi panjang karena menunjukkan proses kerja",
+                    C: "jajar genjang karena bisa menunjukkan data yang masuk atau keluar",
+                    D: "belah ketupat karena menunjukkan keputusan berdasarkan kondisi"
+                },
+                answer: "D"
+            },
+            {
+                no: 12,
+                text: "Awalnya <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>kotak_koin</code> kosong (berisi 0 koin). Perintah memasukkan 2 koin dilakukan berulang kali sebanyak <strong>4 langkah</strong>. Budi mengira isi kotak di akhir adalah 2 koin karena ia lupa mengulanginya.<br>Berapakah jumlah seluruh koin di dalam <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>kotak_koin</code> setelah perintah selesai?",
+                media: `
+                    <div class="my-3 grid grid-cols-1 sm:grid-cols-3 gap-3 bg-sky-50/70 border border-sky-200 rounded-2xl p-4">
+                        <!-- Kartu Inisialisasi -->
+                        <div class="bg-white rounded-2xl border-2 border-slate-300 p-3.5 text-center shadow-xs flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-slate-700 block">INISIALISASI</span>
+                                <span class="text-xs font-mono text-academic-700 font-semibold">kotak_koin</span>
+                            </div>
+                            <div class="my-3 flex flex-col items-center">
+                                <div class="w-14 h-12 rounded-xl bg-amber-100 border-2 border-amber-600 flex items-center justify-center text-amber-700 text-2xl shadow-inner">
+                                    <i class="fa-solid fa-box-open"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-700 bg-slate-100 py-1.5 px-2 rounded-lg">Awal: Kotak Kosong (0 koin)</p>
+                        </div>
+
+                        <!-- Kartu Langkah 1 -->
+                        <div class="bg-white rounded-2xl border-2 border-blue-300 p-3.5 text-center shadow-xs flex flex-col justify-between relative">
+                            <div class="flex items-center justify-between">
+                                <div class="text-left">
+                                    <span class="text-xs font-extrabold uppercase text-slate-800 block">LANGKAH 1</span>
+                                    <span class="text-[10px] font-bold text-blue-600">(PERULANGAN)</span>
+                                </div>
+                                <span class="w-6 h-6 rounded-full bg-blue-700 text-white text-xs font-bold flex items-center justify-center">1</span>
+                            </div>
+                            <div class="my-2.5 space-y-1.5">
+                                <span class="inline-block px-2.5 py-1 rounded-lg bg-sky-100 text-sky-900 font-bold text-xs border border-sky-300">
+                                    <i class="fa-solid fa-coins text-amber-500 mr-1"></i>Masukkan 2 Koin
+                                </span>
+                                <div class="flex justify-center space-x-1 text-amber-500 text-base">
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-800 bg-blue-50 py-1.5 px-2 rounded-lg border border-blue-200">Isi Kotak: <span class="text-blue-700">2 koin</span></p>
+                        </div>
+
+                        <!-- Kartu Langkah 2 -->
+                        <div class="bg-white rounded-2xl border-2 border-emerald-300 p-3.5 text-center shadow-xs flex flex-col justify-between relative">
+                            <div class="flex items-center justify-between">
+                                <div class="text-left">
+                                    <span class="text-xs font-extrabold uppercase text-slate-800 block">LANGKAH 2</span>
+                                    <span class="text-[10px] font-bold text-emerald-600">(DIULANG S.D. 4x)</span>
+                                </div>
+                                <span class="w-6 h-6 rounded-full bg-blue-700 text-white text-xs font-bold flex items-center justify-center">2</span>
+                            </div>
+                            <div class="my-2.5 space-y-1.5">
+                                <span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-300">
+                                    <i class="fa-solid fa-coins text-amber-500 mr-1"></i>Masukkan 2 Koin Lagi
+                                </span>
+                                <div class="flex justify-center space-x-1 text-amber-500 text-base">
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                    <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-800 bg-emerald-50 py-1.5 px-2 rounded-lg border border-emerald-200">Isi Kotak: <span class="text-emerald-700">4 koin</span> ...</p>
+                        </div>
+                    </div>
+                `,
+                options: {
+                    A: "2",
+                    B: "4",
+                    C: "6",
+                    D: "8"
+                },
+                answer: "D"
+            },
+            {
+                no: 13,
+                text: "Guru meminta siswa membuat diagram alir/pseudocode untuk menghitung total belanja dari tiga barang. Harga barang dimasukkan sebagai <code class='px-1 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>h1</code>, <code class='px-1 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>h2</code>, dan <code class='px-1 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>h3</code>. Program harus menjumlahkan ketiga harga dan menampilkan hasilnya. Tidak ada diskon atau pajak dalam masalah ini sehingga instruksi dapat dibuat secara berurutan.<br>Rangkaian instruksi yang benar adalah ....",
+                options: {
+                    A: createFlowchartOptionSVG("INPUT h1, h2, h3", "total ← h1 + h2 + h3", "OUTPUT total"),
+                    B: createFlowchartOptionSVG("OUTPUT total", "INPUT h1, h2, h3", "total ← h1 + h2 + h3"),
+                    C: createFlowchartOptionSVG("total ← h1 × h2 × h3", "OUTPUT h1", "INPUT total"),
+                    D: createFlowchartOptionSVG("INPUT total", "OUTPUT h1 + h2", "total ← h3")
+                },
+                answer: "A"
+            },
+            {
+                no: 14,
+                text: "Pada flowchart kelompoknya, Nisa sudah menggambar simbol mulai, beberapa proses, satu keputusan, dan simbol selesai. Namun, beberapa simbol tidak memiliki garis penghubung sehingga pembaca tidak mengetahui langkah mana yang harus diikuti setelah suatu proses. Guru meminta kelompok itu memperbaiki hubungan antar simbol.<br>Fungsi <strong>garis panah</strong> dalam flowchart adalah ....",
+                options: {
+                    A: "menjelaskan nama pembuat dan tanggal diagram",
+                    B: "menunjukkan arah dan urutan aliran proses",
+                    C: "menggantikan simbol untuk seluruh jenis aktivitas",
+                    D: "menentukan warna yang harus dipakai pada diagram"
+                },
+                answer: "B"
+            },
+            {
+                no: 15,
+                text: "Sebuah flowchart memeriksa nilai kehadiran siswa. Setelah nilai dimasukkan, simbol keputusan menguji kondisi <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>kehadiran &ge; 90</code>. Cabang “Ya” menuju proses menampilkan pesan “Memenuhi”, sedangkan cabang “Tidak” menuju proses menampilkan pesan “Perlu tindak lanjut”. Seorang siswa memasukkan nilai kehadiran tepat <strong>90</strong>.<br>Pesan yang ditampilkan oleh flowchart tersebut adalah ....",
+                media: `
+                    <div class="my-3 inline-block bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-xs">
+                        <svg width="380" height="310" viewBox="0 0 380 310" class="max-w-full h-auto block">
+                            <defs>
+                                <marker id="arr15" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b"/>
+                                </marker>
+                            </defs>
+                            <!-- MULAI -->
+                            <rect x="75" y="8" width="110" height="34" rx="17" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="130" y="29" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="12" font-weight="700">MULAI</text>
+                            <line x1="130" y1="42" x2="130" y2="60" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+
+                            <!-- INPUT -->
+                            <polygon points="45,62 230,62 215,104 30,104" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="130" y="80" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Masukkan nilai</text>
+                            <text x="130" y="95" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">kehadiran siswa</text>
+                            <line x1="130" y1="104" x2="130" y2="122" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+
+                            <!-- DECISION -->
+                            <polygon points="130,124 215,162 130,200 45,162" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="130" y="166" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="700">kehadiran ≥ 90?</text>
+
+                            <!-- CABANG YA -->
+                            <line x1="215" y1="162" x2="245" y2="162" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+                            <text x="228" y="154" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="10" font-weight="700">YA</text>
+                            <rect x="247" y="140" width="125" height="44" rx="4" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="309" y="159" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Tampilkan pesan:</text>
+                            <text x="309" y="174" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="700">“Memenuhi”</text>
+
+                            <!-- CABANG TIDAK -->
+                            <line x1="130" y1="200" x2="130" y2="218" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+                            <text x="152" y="212" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="10" font-weight="700">TIDAK</text>
+                            <rect x="52" y="220" width="156" height="42" rx="4" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="130" y="238" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Tampilkan pesan:</text>
+                            <text x="130" y="253" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="700">“Perlu tindak lanjut”</text>
+
+                            <!-- GARIS PENGGABUNG KE SELESAI -->
+                            <line x1="130" y1="262" x2="130" y2="274" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+                            <polyline points="309,184 309,268 134,268" fill="none" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr15)"/>
+
+                            <!-- SELESAI -->
+                            <rect x="75" y="276" width="110" height="30" rx="15" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="130" y="295" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="12" font-weight="700">SELESAI</text>
+                        </svg>
+                    </div>
+                `,
+                options: {
+                    A: "Perlu tindak lanjut, karena nilai harus lebih dari 90",
+                    B: "Memenuhi hanya jika nilai yang dimasukkan adalah 100",
+                    C: "Tidak ada pesan karena nilai harus berupa bilangan genap",
+                    D: "Memenuhi, karena nilai 90 termasuk nilai yang memenuhi kondisi"
+                },
+                answer: "D"
+            },
+            {
+                no: 16,
+                text: "Petugas kelas ingin membuat flowchart menghitung rata-rata nilai tugas seperti pada gambar berikut.<br>Urutan alur yang paling tepat adalah ....",
+                media: `
+                    <div class="my-3 inline-block bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-xs">
+                        <svg width="290" height="345" viewBox="0 0 290 345" class="max-w-full h-auto block">
+                            <defs>
+                                <marker id="arr16" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b"/>
+                                </marker>
+                            </defs>
+                            <!-- MULAI -->
+                            <rect x="90" y="8" width="110" height="34" rx="17" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="29" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="12" font-weight="700">MULAI</text>
+                            <line x1="145" y1="42" x2="145" y2="58" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr16)"/>
+
+                            <!-- INPUT -->
+                            <polygon points="45,60 265,60 245,104 25,104" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="79" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Masukkan nilai tugas 1,</text>
+                            <text x="145" y="95" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">tugas 2, tugas 3</text>
+                            <line x1="145" y1="104" x2="145" y2="120" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr16)"/>
+
+                            <!-- HITUNG JUMLAH -->
+                            <rect x="25" y="122" width="240" height="44" rx="4" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="140" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Hitung jumlah:</text>
+                            <text x="145" y="156" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="700">Jumlah = Tugas 1 + Tugas 2 + Tugas 3</text>
+                            <line x1="145" y1="166" x2="145" y2="182" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr16)"/>
+
+                            <!-- HITUNG RATA-RATA -->
+                            <rect x="45" y="184" width="200" height="44" rx="4" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="202" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Hitung rata-rata:</text>
+                            <text x="145" y="218" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="700">Rata-rata = Jumlah / 3</text>
+                            <line x1="145" y1="228" x2="145" y2="244" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr16)"/>
+
+                            <!-- TAMPILKAN HASIL -->
+                            <polygon points="50,246 255,246 240,284 35,284" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="269" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="11" font-weight="600">Tampilkan hasil rata-rata</text>
+                            <line x1="145" y1="284" x2="145" y2="300" stroke="#1e293b" stroke-width="1.8" marker-end="url(#arr16)"/>
+
+                            <!-- SELESAI -->
+                            <rect x="90" y="302" width="110" height="34" rx="17" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+                            <text x="145" y="323" text-anchor="middle" fill="#0f172a" font-family="Inter, sans-serif" font-size="12" font-weight="700">SELESAI</text>
+                        </svg>
+                    </div>
+                `,
+                options: {
+                    A: "Mulai → tampilkan hasil → input tiga nilai → hitung jumlah → hitung rata-rata → input → selesai",
+                    B: "Mulai → hitung rata-rata → input nilai → tampilkan hasil → Selesai",
+                    C: "Mulai → input tiga nilai → hitung jumlah → rata-rata → tampilkan hasil → Selesai",
+                    D: "Input nilai → Selesai → hitung jumlah → Mulai → tampilkan hasil"
+                },
+                answer: "C"
+            },
+            {
+                no: 17,
+                text: "Seorang siswa membuat pseudocode untuk menampilkan nomor antrean dari 1 sampai 5. Ia menulis: <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>UNTUK nomor &larr; 1 SAMPAI 4</code>, lalu <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>TAMPILKAN nomor</code>, kemudian <code class='px-1.5 py-0.5 bg-slate-100 rounded font-mono text-academic-700 font-semibold'>SELESAI</code>. Ketika diuji, program hanya menampilkan empat nomor. Siswa tersebut ingin memperbaiki satu bagian saja agar urutan nomor 1, 2, 3, 4, dan 5 dapat ditampilkan.<br>Perbaikan paling tepat pada pseudocode tersebut adalah ....",
+                media: `
+                    <div class="my-3 max-w-lg rounded-2xl overflow-hidden border border-slate-300 shadow-xs font-mono text-xs sm:text-sm bg-white">
+                        <div class="bg-slate-800 text-slate-300 px-4 py-2 text-xs flex items-center justify-between">
+                            <span>pseudocode_antrean.txt</span>
+                            <span class="text-amber-300">Pseudocode</span>
+                        </div>
+                        <div class="divide-y divide-slate-100">
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">1</span><span class="px-3 py-1 text-slate-900 font-semibold">PROGRAM TampilkanNomorAntrean</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">2</span><span class="px-3 py-1 text-slate-900 font-semibold">DEKLARASI</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">3</span><span class="px-3 py-1 pl-7 text-slate-800">nomor : integer</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">4</span><span class="px-3 py-1 text-slate-900 font-semibold">ALGORITMA:</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">5</span><span class="px-3 py-1 pl-7 text-emerald-700 italic">// Perulangan dari angka 1 sampai 5</span></div>
+                            <div class="flex bg-amber-50/80"><span class="w-9 text-right pr-3 py-1 bg-amber-100 text-amber-800 font-bold select-none border-r border-orange-500">6</span><span class="px-3 py-1 pl-7 text-slate-900 font-bold">UNTUK nomor &larr; 1 SAMPAI 4</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">7</span><span class="px-3 py-1 pl-12 text-slate-800">TAMPILKAN nomor</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">8</span><span class="px-3 py-1 pl-7 text-slate-900 font-semibold">SELESAI-UNTUK</span></div>
+                            <div class="flex"><span class="w-9 text-right pr-3 py-1 bg-slate-100 text-slate-400 select-none border-r border-orange-400">9</span><span class="px-3 py-1 text-slate-900 font-semibold">SELESAI-PROGRAM</span></div>
+                        </div>
+                    </div>
+                `,
+                options: {
+                    A: "mengubah batas akhir perulangan dari 4 menjadi 5",
+                    B: "mengubah nilai awal perulangan dari 1 menjadi 0",
+                    C: "memindahkan perintah tampilkan setelah perulangan selesai",
+                    D: "menghapus variabel nomor dari instruksi perulangan"
+                },
+                answer: "A"
+            },
+            {
+                no: 18,
+                text: "Di ruang komputer, siswa diminta memasukkan teks, memilih menu, dan memindahkan penunjuk pada layar. Komputer menyediakan beberapa perangkat, antara lain monitor, keyboard, mouse, speaker, dan printer. Guru meminta siswa menentukan perangkat yang berfungsi sebagai alat masukan untuk mengetik huruf dan angka.<br>Perangkat yang paling sesuai dengan fungsi tersebut adalah ....",
+                options: {
+                    A: "monitor sebagai perangkat keluaran visual",
+                    B: "speaker sebagai perangkat keluaran suara",
+                    C: "keyboard sebagai perangkat masukan teks",
+                    D: "printer sebagai perangkat keluaran cetak"
+                },
+                answer: "C"
+            },
+            {
+                no: 19,
+                text: "Saat aplikasi pengolah kata dibuka, komputer membaca instruksi program, melakukan perhitungan, dan mengatur perpindahan data antarbagian. Siswa mengetahui bahwa sebuah komputer memiliki CPU, RAM, media penyimpanan, monitor, dan keyboard. Ia ingin menjelaskan komponen yang bertugas memproses instruksi program.<br>Komponen yang menjalankan fungsi utama pemrosesan instruksi adalah ....",
+                options: {
+                    A: "RAM yang menyimpan data sementara saat aplikasi berjalan dengan baik",
+                    B: "CPU yang mengolah instruksi dan mengendalikan operasi komputer",
+                    C: "SSD yang menyimpan berkas secara permanen",
+                    D: "monitor yang menampilkan informasi hasil pengolahan"
+                },
+                answer: "B"
+            },
+            {
+                no: 20,
+                text: "Laboratorium memiliki komputer yang dapat menjalankan aplikasi sederhana, tetapi menjadi lambat ketika banyak tab peramban dan aplikasi presentasi dibuka bersamaan. Ruang penyimpanan masih cukup, layar berfungsi normal, dan keyboard tidak bermasalah. Petugas menduga kapasitas memori kerja menjadi salah satu penyebab, karena banyak aplikasi aktif secara bersamaan.<br>Komponen yang paling relevan untuk diperiksa terlebih dahulu berdasarkan gejala tersebut adalah ....",
+                options: {
+                    A: "printer, karena mencetak dokumen dari beberapa aplikasi",
+                    B: "speaker, karena menghasilkan suara dari aplikasi aktif",
+                    C: "mouse, karena mengirimkan gerakan penunjuk ke komputer",
+                    D: "RAM, karena menampung data dan aplikasi yang sedang digunakan"
+                },
+                answer: "D"
+            },
+            {
+                no: 21,
+                text: "Sistem komputer sekolah tidak hanya terdiri atas perangkat keras dan perangkat lunak. Ada manusia yang mengoperasikan komputer, memasang aplikasi, merawat perangkat, dan menggunakan hasil pengolahan data. Dalam istilah sistem komputer, manusia yang terlibat dalam penggunaan atau pengelolaan sistem disebut <strong>brainware</strong>.<br>Contoh brainware dalam kegiatan laboratorium adalah ....",
+                options: {
+                    A: "operator yang mengelola akun dan membantu penggunaan komputer",
+                    B: "keyboard yang digunakan untuk mengetik data siswa ke dalam komputer",
+                    C: "sistem operasi yang mengatur kerja perangkat agar bisa sinkron semua perangkat kerasnya",
+                    D: "aplikasi pengolah angka untuk merekap nilai"
+                },
+                answer: "A"
+            },
+            {
+                no: 22,
+                text: "Sebelum komputer dimatikan, siswa menyimpan dokumen pada SSD. Ketika dokumen sedang diedit, sebagian data aplikasi berada di RAM agar dapat diakses dengan cepat. Setelah komputer dimatikan, dokumen yang telah disimpan tetap tersedia, sedangkan data kerja sementara di RAM tidak dipertahankan seperti berkas pada SSD.<br>Pernyataan yang benar tentang kedua komponen tersebut adalah ....",
+                options: {
+                    A: "RAM menyimpan seluruh berkas permanen, sedangkan SSD hanya mengolah instruksi",
+                    B: "RAM menampilkan gambar, sedangkan SSD mengeluarkan suara",
+                    C: "RAM menyimpan data sementara, sedangkan SSD menyimpan berkas jangka panjang",
+                    D: "RAM mencetak dokumen, sedangkan SSD memasukkan karakter"
+                },
+                answer: "C"
+            },
+            {
+                no: 23,
+                text: "Sebuah komputer sekolah menggunakan perangkat berikut: (1) mikrofon untuk merekam suara, (2) layar untuk menampilkan video, (3) kamera untuk mengambil gambar, dan (4) proyektor untuk menampilkan tampilan ke layar besar. Guru meminta kelompok mengelompokkan perangkat berdasarkan arah aliran data terhadap komputer, bukan berdasarkan bentuk atau ukuran perangkat.<br>Pengelompokan yang tepat adalah ....",
+                options: {
+                    A: "mikrofon dan layar sebagai masukan; kamera dan proyektor sebagai keluaran",
+                    B: "mikrofon dan kamera sebagai masukan; layar dan proyektor sebagai keluaran",
+                    C: "kamera dan layar sebagai keluaran; mikrofon dan proyektor sebagai masukan",
+                    D: "keempat perangkat termasuk masukan karena terhubung ke komputer"
+                },
+                answer: "B"
+            },
+            {
+                no: 24,
+                text: "Guru ingin menyampaikan hasil simulasi kepada siswa dalam dua bentuk. Grafik akan ditampilkan di depan kelas, sedangkan narasi penjelasan akan diperdengarkan melalui perangkat audio. Komputer sudah memiliki file simulasi dan aplikasi pemutar. Siswa diminta memilih perangkat keras yang sesuai untuk kedua bentuk keluaran tersebut.<br>Pasangan perangkat keluaran yang tepat adalah ....",
+                options: {
+                    A: "keyboard untuk grafik dan mouse untuk narasi suara",
+                    B: "scanner untuk grafik dan mikrofon untuk narasi suara",
+                    C: "kamera untuk grafik dan flashdisk untuk narasi suara",
+                    D: "proyektor untuk grafik dan speaker untuk narasi suara"
+                },
+                answer: "D"
+            },
+            {
+                no: 25,
+                text: "Komputer menyala dan suara dari video terdengar, tetapi layar tetap gelap. Kabel monitor telah terhubung dan monitor menunjukkan lampu daya menyala. Siswa tidak diminta membongkar perangkat, melainkan menyampaikan pemeriksaan awal yang aman dan sesuai fungsi komponen untuk dilaporkan kepada petugas laboratorium.<br>Pemeriksaan awal yang paling relevan adalah ....",
+                options: {
+                    A: "memeriksa sumber input monitor dan koneksi tampilan bersama petugas",
+                    B: "mengganti semua perangkat tanpa memeriksa penyebabnya terlebih dahulu",
+                    C: "menghapus dokumen pengguna karena layar tidak menampilkan gambar",
+                    D: "menaikkan volume speaker untuk memperbaiki tampilan monitor"
+                },
+                answer: "A"
+            },
+            {
+                no: 26,
+                text: "Siswa menyusun laporan pengamatan lingkungan sekolah. Judul laporan perlu terlihat menonjol, sedangkan isi paragraf harus tetap mudah dibaca. Ia ingin mengatur ukuran huruf, ketebalan, dan perataan judul tanpa mengubah seluruh paragraf dalam dokumen.<br>Fitur pengolah kata yang digunakan untuk mengatur tampilan judul adalah ....",
+                options: {
+                    A: "mail merge untuk membuat surat kepada banyak penerima",
+                    B: "pemformatan karakter dan paragraf pada teks judul",
+                    C: "find and replace untuk mengganti kata secara otomatis",
+                    D: "word count untuk menghitung jumlah kata dokumen"
+                },
+                answer: "B"
+            },
+            {
+                no: 27,
+                text: "Sebuah kelompok menyusun laporan 25 halaman dengan enam bagian utama dan beberapa subbagian. Pada awalnya mereka memperbesar dan menebalkan judul satu per satu. Ketika guru meminta semua judul utama diubah menjadi ukuran yang sama, kelompok harus mengedit banyak bagian secara manual dan beberapa judul terlewat. Mereka ingin menerapkan cara yang lebih konsisten serta memudahkan pembuatan daftar isi otomatis.<br>Fitur yang paling tepat digunakan sejak awal adalah ....",
+                options: {
+                    A: "Zoom untuk memperbesar tampilan halaman saat menyunting",
+                    B: "Replace untuk mengganti seluruh kata yang sama dalam laporan",
+                    C: "Clipboard untuk menyimpan sementara teks yang disalin kemudian ditempel",
+                    D: "Styles untuk menerapkan Heading pada judul utama dan subjudul"
+                },
+                answer: "D"
+            },
+            {
+                no: 28,
+                text: "Laporan praktikum terdiri atas delapan halaman. Guru meminta nama kelompok tercantum pada bagian atas setiap halaman dan nomor halaman muncul secara berurutan di bagian bawah. Siswa tidak ingin menyalin nama dan mengetik nomor halaman satu per satu karena perubahan halaman dapat membuat penomoran tidak sesuai.<br>Kombinasi fitur yang tepat adalah ....",
+                options: {
+                    A: "Text Box untuk nama kelompok dan WordArt untuk nomor halaman",
+                    B: "Footnote untuk nama kelompok dan Comment untuk nomor halaman",
+                    C: "Header untuk nama kelompok dan Page Number pada Footer",
+                    D: "Watermark untuk nama kelompok dan Find untuk nomor halaman"
+                },
+                answer: "C"
+            },
+            {
+                no: 29,
+                text: "Sebelum laporan dikirim kepada guru, Sinta menemukan beberapa kata yang salah ketik dan tanda baca yang tidak konsisten. Ia ingin memeriksa ejaan menggunakan fitur aplikasi, tetapi tetap perlu membaca ulang karena nama tempat atau istilah khusus mungkin tidak dikenali oleh pemeriksa otomatis.<br>Tindakan yang paling tepat adalah ....",
+                options: {
+                    A: "menjalankan pemeriksa ejaan lalu membaca ulang isi dokumen",
+                    B: "mengubah semua kata menjadi huruf kapital agar kesalahan hilang",
+                    C: "menghapus paragraf yang memiliki garis penanda ejaan",
+                    D: "mengandalkan pemeriksa otomatis tanpa meninjau isi laporan"
+                },
+                answer: "A"
+            },
+            {
+                no: 30,
+                text: "Laporan sejarah sekolah memiliki banyak bab dan subbab. Pembaca sering kesulitan menemukan bagian tertentu karena dokumen tidak memiliki daftar isi. Setiap bab sebenarnya sudah diberi judul, tetapi format judul dibuat secara manual dan tidak menggunakan tingkat heading yang konsisten.<br>Perbaikan yang paling efektif agar daftar isi dapat dibuat dan diperbarui dengan mudah adalah ....",
+                options: {
+                    A: "menambahkan banyak spasi di awal setiap bab dan subbab agar menjadi rapi",
+                    B: "menerapkan Heading secara berjenjang lalu menyisipkan daftar isi otomatis",
+                    C: "mengubah semua judul menjadi gambar agar mudah dikenali",
+                    D: "menempatkan seluruh judul dalam satu kotak teks yang sama"
+                },
+                answer: "B"
+            }
+        ];
+
+        // STATE APLIKASI
+        let state = {
+            student: { name: '', id: '', className: '' },
+            currentIndex: 0,
+            answers: new Array(30).fill(null),
+            doubts: new Array(30).fill(false),
+            timeLeft: 60 * 60, // 60 menit dalam detik
+            timerInterval: null,
+            lastResultPayload: null
+        };
+
+        const STORAGE_KEY_WEBHOOK = 'psas_inf7_webhook_url';
+        const STORAGE_KEY_RESULTS = 'psas_inf7_local_results';
+        const TEACHER_PIN = '1234';
+
+        // INISIALISASI SAAT HALAMAN DIMUAT
+        window.addEventListener('DOMContentLoaded', () => {
+            updateWebhookBadge();
+            renderNavGrid();
+        });
+
+        function updateWebhookBadge() {
+            const url = localStorage.getItem(STORAGE_KEY_WEBHOOK);
+            const dot = document.getElementById('webhook-dot');
+            const text = document.getElementById('webhook-status-text');
+            if (url && url.startsWith('http')) {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+                text.textContent = 'Spreadsheet Aktif';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+                text.textContent = 'Mode Lokal / CSV';
+            }
+        }
+
+        // MULAI UJIAN
+        function startExam(e) {
+            e.preventDefault();
+            const name = document.getElementById('student-name').value.trim();
+            const id = document.getElementById('student-id').value.trim();
+            const className = document.getElementById('student-class').value;
+
+            if (!name || !id || !className) return;
+
+            state.student = { name, id, className };
+            state.currentIndex = 0;
+            state.answers = new Array(30).fill(null);
+            state.doubts = new Array(30).fill(false);
+            state.timeLeft = 60 * 60;
+
+            // Tampilkan Identitas di Header Ujian
+            document.getElementById('exam-student-name').textContent = name;
+            document.getElementById('exam-student-id').textContent = id;
+            document.getElementById('exam-student-class').textContent = className;
+            document.getElementById('exam-avatar').textContent = name.charAt(0).toUpperCase();
+
+            // Ganti tampilan ke Ujian
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-exam').classList.remove('hidden');
+            document.getElementById('header-timer').classList.remove('hidden');
+            document.getElementById('header-timer').classList.add('flex');
+
+            renderQuestion(0);
+            updateNavGrid();
+            startTimer();
+        }
+
+        // TIMER HITUNG MUNDUR
+        function startTimer() {
+            clearInterval(state.timerInterval);
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    showToast('Waktu ujian habis! Jawaban otomatis dikirim.', 'warning');
+                    finishExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(state.timeLeft / 60);
+            const secs = state.timeLeft % 60;
+            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            const displayEl = document.getElementById('timer-display');
+            displayEl.textContent = formatted;
+
+            const badge = document.getElementById('header-timer');
+            if (state.timeLeft <= 300) {
+                badge.classList.remove('bg-white/15');
+                badge.classList.add('bg-rose-600', 'border-rose-400');
+            }
+        }
+
+        // RENDER SOAL SAAT INI
+        function renderQuestion(index) {
+            state.currentIndex = index;
+            const q = QUESTIONS[index];
+
+            document.getElementById('current-q-num').textContent = q.no;
+            document.getElementById('question-text').innerHTML = q.text;
+
+            // Render Media (Flowchart / Pseudocode / Diagram)
+            const mediaContainer = document.getElementById('question-media');
+            if (q.media) {
+                mediaContainer.innerHTML = q.media;
+                mediaContainer.classList.remove('hidden');
+            } else {
+                mediaContainer.innerHTML = '';
+                mediaContainer.classList.add('hidden');
+            }
+
+            // Badge Ragu-ragu
+            const doubtBadge = document.getElementById('doubt-badge');
+            const btnDoubt = document.getElementById('btn-doubt');
+            if (state.doubts[index]) {
+                doubtBadge.classList.remove('hidden');
+                btnDoubt.classList.add('bg-amber-400', 'text-amber-950', 'border-amber-500');
+                btnDoubt.classList.remove('bg-amber-50', 'text-amber-800');
+            } else {
+                doubtBadge.classList.add('hidden');
+                btnDoubt.classList.remove('bg-amber-400', 'text-amber-950', 'border-amber-500');
+                btnDoubt.classList.add('bg-amber-50', 'text-amber-800');
+            }
+
+            // Render Pilihan A, B, C, D (Mendukung layout grid untuk opsi bergambar flowchart No. 13)
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            const keys = ['A', 'B', 'C', 'D'];
+            const hasVisualOption = q.options.A.includes('<svg');
+
+            optionsContainer.className = hasVisualOption
+                ? 'grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2'
+                : 'space-y-3 pt-2';
+
+            keys.forEach(key => {
+                const isSelected = state.answers[index] === key;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectOption(key);
+                btn.className = `w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition flex items-start space-x-3.5 group ${
+                    isSelected
+                        ? 'border-academic-600 bg-academic-50/80 shadow-xs'
+                        : 'border-slate-200 hover:border-academic-300 hover:bg-slate-50'
+                }`;
+
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 transition ${
+                        isSelected
+                            ? 'bg-academic-600 text-white shadow-xs'
+                            : 'bg-slate-100 text-slate-600 group-hover:bg-academic-100 group-hover:text-academic-700'
+                    }">${key}</span>
+                    <div class="${hasVisualOption ? 'flex-1 flex justify-center' : 'pt-1'} text-sm sm:text-base font-medium ${isSelected ? 'text-academic-950 font-semibold' : 'text-slate-700'}">
+                        ${q.options[key]}
+                    </div>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Atur Tombol Navigasi Bawah
+            document.getElementById('btn-prev').disabled = (index === 0);
+            if (index === QUESTIONS.length - 1) {
+                document.getElementById('btn-next').classList.add('hidden');
+                document.getElementById('btn-finish').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+                document.getElementById('btn-finish').classList.add('hidden');
+            }
+
+            updateNavGrid();
+        }
+
+        function selectOption(key) {
+            state.answers[state.currentIndex] = key;
+            renderQuestion(state.currentIndex);
+        }
+
+        function toggleDoubt() {
+            state.doubts[state.currentIndex] = !state.doubts[state.currentIndex];
+            renderQuestion(state.currentIndex);
+        }
+
+        function prevQuestion() {
+            if (state.currentIndex > 0) {
+                renderQuestion(state.currentIndex - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentIndex < QUESTIONS.length - 1) {
+                renderQuestion(state.currentIndex + 1);
+            }
+        }
+
+        // NAVIGASI NOMOR 1 - 30
+        function renderNavGrid() {
+            const grid = document.getElementById('question-nav-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = i + 1;
+                btn.onclick = () => renderQuestion(i);
+                btn.id = `nav-btn-${i}`;
+                btn.className = 'h-10 rounded-xl font-bold text-xs sm:text-sm border transition flex items-center justify-center';
+                grid.appendChild(btn);
+            }
+        }
+
+        function updateNavGrid() {
+            let answeredCount = 0;
+            let doubtCount = 0;
+            let unansweredCount = 0;
+
+            for (let i = 0; i < 30; i++) {
+                const btn = document.getElementById(`nav-btn-${i}`);
+                if (!btn) continue;
+
+                const isCurrent = (i === state.currentIndex);
+                const isDoubt = state.doubts[i];
+                const isAnswered = state.answers[i] !== null;
+
+                if (isDoubt) doubtCount++;
+                else if (isAnswered) answeredCount++;
+                else unansweredCount++;
+
+                let baseClass = 'h-10 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center ';
+                if (isDoubt) {
+                    baseClass += 'bg-amber-400 text-amber-950 border-amber-500 ';
+                } else if (isAnswered) {
+                    baseClass += 'bg-emerald-500 text-white border-emerald-600 ';
+                } else {
+                    baseClass += 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 ';
+                }
+
+                if (isCurrent) {
+                    baseClass += 'ring-2 ring-offset-2 ring-academic-600 scale-105 ';
+                }
+
+                btn.className = baseClass;
+            }
+
+            document.getElementById('answered-count').textContent = answeredCount + doubtCount;
+            document.getElementById('legend-answered').textContent = answeredCount;
+            document.getElementById('legend-doubt').textContent = doubtCount;
+            document.getElementById('legend-unanswered').textContent = unansweredCount;
+        }
+
+        // KONFIRMASI SELESAI UJIAN
+        function confirmFinishExam() {
+            const unanswered = state.answers.filter(a => a === null).length;
+            const doubts = state.doubts.filter(d => d === true).length;
+            let msg = 'Apakah kamu yakin ingin menyelesaikan ujian dan mengirim jawaban sekarang?';
+
+            if (unanswered > 0 || doubts > 0) {
+                msg = `Perhatian: Masih ada <strong>${unanswered} soal belum dijawab</strong> dan <strong>${doubts} soal ditandai ragu-ragu</strong>. Yakin ingin tetap mengumpulkan?`;
+            }
+
+            document.getElementById('confirm-message').innerHTML = msg;
+            document.getElementById('modal-confirm').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('modal-confirm').classList.add('hidden');
+        }
+
+        // HITUNG NILAI & KIRIM KE SPREADSHEET
+        async function finishExam() {
+            closeConfirmModal();
+            clearInterval(state.timerInterval);
+
+            let correct = 0;
+            let wrong = 0;
+            const detailAnswers = [];
+            const reviewItems = [];
+
+            QUESTIONS.forEach((q, idx) => {
+                const userAns = state.answers[idx] || '-';
+                const isCorrect = (userAns === q.answer);
+
+                detailAnswers.push(userAns);
+                if (isCorrect) correct++;
+                else wrong++;
+
+                reviewItems.push({
+                    no: q.no,
+                    userAns: userAns,
+                    keyAns: q.answer,
+                    isCorrect: isCorrect
+                });
+            });
+
+            // Rumus Nilai Maksimal 100 proporsional pembulatan 2 desimal
+            const finalScore = Math.round((correct / 30) * 100 * 100) / 100;
+
+            const now = new Date();
+            const timestamp = now.toLocaleString('id-ID', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
+            const payload = {
+                timestamp: timestamp,
+                jenjang: 'Kelas 7',
+                noPeserta: state.student.id,
+                namaSiswa: state.student.name,
+                kelas: state.student.className,
+                benar: correct,
+                salah: wrong,
+                nilai: finalScore,
+                detailJawaban: detailAnswers,
+                synced: false
+            };
+
+            state.lastResultPayload = payload;
+
+            // Tampilkan Halaman Hasil
+            document.getElementById('view-exam').classList.add('hidden');
+            document.getElementById('header-timer').classList.add('hidden');
+            document.getElementById('header-timer').classList.remove('flex');
+            document.getElementById('view-result').classList.remove('hidden');
+
+            document.getElementById('res-correct').textContent = correct;
+            document.getElementById('res-wrong').textContent = wrong;
+            document.getElementById('res-score').textContent = finalScore;
+            document.getElementById('res-name').textContent = payload.namaSiswa;
+            document.getElementById('res-id').textContent = payload.noPeserta;
+            document.getElementById('res-class').textContent = payload.kelas;
+            document.getElementById('res-timestamp').textContent = payload.timestamp;
+
+            renderReviewSection(reviewItems);
+            saveResultLocally(payload);
+            await sendPayloadToGoogleSheets(payload);
+        }
+
+        function renderReviewSection(reviewItems) {
+            const container = document.getElementById('review-answers-container');
+            container.innerHTML = reviewItems.map(item => `
+                <div class="py-2.5 flex items-center justify-between gap-2">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center ${
+                            item.isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                        }">${item.no}</span>
+                        <div>
+                            <span class="font-semibold text-slate-800">Jawaban Kamu: <span class="font-mono">${item.userAns}</span></span>
+                            ${!item.isCorrect ? `<span class="block text-xs text-slate-500">Kunci Jawaban: <strong class="font-mono text-emerald-700">${item.keyAns}</strong></span>` : ''}
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-xs font-bold ${
+                        item.isCorrect ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
+                    }">
+                        ${item.isCorrect ? '<i class="fa-solid fa-check mr-1"></i>Benar' : '<i class="fa-solid fa-xmark mr-1"></i>Salah'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function toggleReviewSection() {
+            const box = document.getElementById('review-answers-container');
+            const chevron = document.getElementById('review-chevron');
+            box.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+
+        function saveResultLocally(payload) {
+            try {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_RESULTS) || '[]');
+                existing.unshift(payload);
+                localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(existing));
+            } catch (err) {
+                console.error('Gagal menyimpan riwayat lokal:', err);
+            }
+        }
+
+        function markLocalResultSynced(timestamp, noPeserta) {
+            try {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_RESULTS) || '[]');
+                const idx = existing.findIndex(r => r.timestamp === timestamp && r.noPeserta === noPeserta);
+                if (idx !== -1) {
+                    existing[idx].synced = true;
+                    localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(existing));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function sendPayloadToGoogleSheets(payload) {
+            const webhookUrl = localStorage.getItem(STORAGE_KEY_WEBHOOK);
+            const box = document.getElementById('sync-status-box');
+            const icon = document.getElementById('sync-icon');
+            const title = document.getElementById('sync-title');
+            const desc = document.getElementById('sync-desc');
+            const retryBtn = document.getElementById('btn-retry-sync');
+
+            if (!webhookUrl || !webhookUrl.startsWith('http')) {
+                box.className = 'rounded-2xl p-4 border flex items-center justify-between gap-3 bg-amber-50 border-amber-200 text-amber-900';
+                icon.className = 'fa-solid fa-database text-xl text-amber-600';
+                title.textContent = 'Tersimpan di Perangkat (URL Spreadsheet Belum Diatur)';
+                desc.textContent = 'Silakan unduh bukti/hasil CSV di bawah ini atau laporkan ke guru pengawas.';
+                retryBtn.classList.add('hidden');
+                return;
+            }
+
+            box.className = 'rounded-2xl p-4 border flex items-center justify-between gap-3 bg-blue-50 border-blue-200 text-blue-900';
+            icon.className = 'fa-solid fa-spinner fa-spin text-xl text-blue-600';
+            title.textContent = 'Mengirim hasil langsung ke Google Spreadsheet...';
+            desc.textContent = 'Menghubungkan ke server Google Apps Script...';
+            retryBtn.classList.add('hidden');
+
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                payload.synced = true;
+                markLocalResultSynced(payload.timestamp, payload.noPeserta);
+
+                box.className = 'rounded-2xl p-4 border flex items-center justify-between gap-3 bg-emerald-50 border-emerald-200 text-emerald-900';
+                icon.className = 'fa-solid fa-circle-check text-xl text-emerald-600';
+                title.textContent = 'Berhasil Terkirim ke Google Spreadsheet!';
+                desc.textContent = 'Nilai dan rincian jawaban kamu telah tercatat otomatis di lembar rekap guru.';
+                retryBtn.classList.add('hidden');
+            } catch (error) {
+                console.error('Error pengiriman Spreadsheet:', error);
+                box.className = 'rounded-2xl p-4 border flex items-center justify-between gap-3 bg-rose-50 border-rose-200 text-rose-900';
+                icon.className = 'fa-solid fa-circle-exclamation text-xl text-rose-600';
+                title.textContent = 'Gagal Mengirim Otomatis ke Spreadsheet';
+                desc.textContent = 'Periksa koneksi internet Anda lalu klik Kirim Ulang, atau unduh file CSV sebagai cadangan.';
+                retryBtn.classList.remove('hidden');
+            }
+        }
+
+        function retrySendToSpreadsheet() {
+            if (state.lastResultPayload) {
+                sendPayloadToGoogleSheets(state.lastResultPayload);
+            }
+        }
+
+        function resetToLogin() {
+            document.getElementById('login-form').reset();
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('review-answers-container').classList.add('hidden');
+            document.getElementById('view-login').classList.remove('hidden');
+            const badge = document.getElementById('header-timer');
+            badge.classList.remove('bg-rose-600', 'border-rose-400');
+            badge.classList.add('bg-white/15');
+        }
+
+        // UNDUH CSV (TUNGGAL & SEMUA REKAP)
+        function generateCSVContent(records) {
+            const headers = ['Waktu Kirim', 'Jenjang', 'Kelas', 'No. Peserta', 'Nama Siswa', 'Benar', 'Salah', 'Nilai (Max 100)'];
+            for (let i = 1; i <= 30; i++) headers.push(`No. ${i}`);
+
+            const rows = [headers.join(',')];
+            records.forEach(r => {
+                const escapeCSV = (val) => `"${String(val).replace(/"/g, '""')}"`;
+                const rowData = [
+                    escapeCSV(r.timestamp),
+                    escapeCSV(r.jenjang || 'Kelas 7'),
+                    escapeCSV(r.kelas),
+                    escapeCSV(r.noPeserta),
+                    escapeCSV(r.namaSiswa),
+                    r.benar,
+                    r.salah,
+                    r.nilai,
+                    ...(r.detailJawaban || []).map(ans => escapeCSV(ans))
+                ];
+                rows.push(rowData.join(','));
+            });
+            return '\uFEFF' + rows.join('\n');
+        }
+
+        function triggerCSVDownload(csvString, filename) {
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadSingleResultCSV() {
+            if (!state.lastResultPayload) return;
+            const csv = generateCSVContent([state.lastResultPayload]);
+            const safeName = state.lastResultPayload.namaSiswa.replace(/[^a-zA-Z0-9]/g, '_');
+            const safeClass = state.lastResultPayload.kelas.replace(/\s+/g, '_');
+            triggerCSVDownload(csv, `Hasil_PSAS_Inf7_${safeClass}_${safeName}.csv`);
+            showToast('File CSV hasil ujian berhasil diunduh!');
+        }
+
+        function exportAllResultsCSV() {
+            const records = JSON.parse(localStorage.getItem(STORAGE_KEY_RESULTS) || '[]');
+            if (records.length === 0) {
+                showToast('Belum ada data hasil ujian yang tersimpan.', 'warning');
+                return;
+            }
+            const csv = generateCSVContent(records);
+            triggerCSVDownload(csv, `Rekap_Nilai_PSAS_Informatika_7_${new Date().toISOString().slice(0,10)}.csv`);
+            showToast(`Berhasil mengekspor ${records.length} data siswa ke CSV!`);
+        }
+
+        // PANEL GURU & PENGATURAN WEBHOOK
+        function openTeacherAuth() {
+            document.getElementById('teacher-pin-input').value = '';
+            document.getElementById('pin-error-msg').classList.add('hidden');
+            document.getElementById('modal-teacher-pin').classList.remove('hidden');
+            setTimeout(() => document.getElementById('teacher-pin-input').focus(), 100);
+        }
+
+        function closeTeacherPinModal() {
+            document.getElementById('modal-teacher-pin').classList.add('hidden');
+        }
+
+        function verifyTeacherPin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('teacher-pin-input').value.trim();
+            if (pin === TEACHER_PIN) {
+                closeTeacherPinModal();
+                openTeacherPanel();
+            } else {
+                document.getElementById('pin-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function openTeacherPanel() {
+            const savedUrl = localStorage.getItem(STORAGE_KEY_WEBHOOK) || '';
+            document.getElementById('input-webhook-url').value = savedUrl;
+            document.getElementById('webhook-feedback').classList.add('hidden');
+            renderTeacherRekapTable();
+            switchTeacherTab('tab-webhook');
+            document.getElementById('modal-teacher-panel').classList.remove('hidden');
+        }
+
+        function closeTeacherPanel() {
+            document.getElementById('modal-teacher-panel').classList.add('hidden');
+        }
+
+        function switchTeacherTab(tabId) {
+            const tabs = ['tab-webhook', 'tab-rekap', 'tab-script'];
+            tabs.forEach(id => {
+                const el = document.getElementById(id);
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    el.classList.remove('hidden');
+                    btn.className = 'px-4 py-2.5 rounded-t-xl font-bold text-xs sm:text-sm bg-white text-academic-700 border-t border-x border-slate-200';
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = 'px-4 py-2.5 rounded-t-xl font-semibold text-xs sm:text-sm text-slate-600 hover:text-slate-900';
+                }
+            });
+            if (tabId === 'tab-rekap') renderTeacherRekapTable();
+        }
+
+        function saveWebhookUrl() {
+            const url = document.getElementById('input-webhook-url').value.trim();
+            const fb = document.getElementById('webhook-feedback');
+            if (!url) {
+                fb.textContent = 'Masukkan URL Web App Google Apps Script terlebih dahulu.';
+                fb.className = 'rounded-xl p-3 text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200';
+                fb.classList.remove('hidden');
+                return;
+            }
+            localStorage.setItem(STORAGE_KEY_WEBHOOK, url);
+            updateWebhookBadge();
+            fb.textContent = 'URL Google Spreadsheet berhasil disimpan! Hasil ujian siswa kelas VII akan otomatis dikirim ke Spreadsheet.';
+            fb.className = 'rounded-xl p-3 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
+            fb.classList.remove('hidden');
+            showToast('URL Spreadsheet disimpan!');
+        }
+
+        function clearWebhookUrl() {
+            localStorage.removeItem(STORAGE_KEY_WEBHOOK);
+            document.getElementById('input-webhook-url').value = '';
+            updateWebhookBadge();
+            const fb = document.getElementById('webhook-feedback');
+            fb.textContent = 'URL Spreadsheet dihapus. Aplikasi beralih ke Mode Lokal / Unduh CSV.';
+            fb.className = 'rounded-xl p-3 text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300';
+            fb.classList.remove('hidden');
+        }
+
+        async function testWebhookConnection() {
+            const url = document.getElementById('input-webhook-url').value.trim();
+            const fb = document.getElementById('webhook-feedback');
+            if (!url || !url.startsWith('http')) {
+                fb.textContent = 'Masukkan URL Web App yang valid terlebih dahulu sebelum melakukan tes.';
+                fb.className = 'rounded-xl p-3 text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200';
+                fb.classList.remove('hidden');
+                return;
+            }
+
+            fb.textContent = 'Menguji koneksi & mengirim data uji coba ke Google Spreadsheet...';
+            fb.className = 'rounded-xl p-3 text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200';
+            fb.classList.remove('hidden');
+
+            const dummyPayload = {
+                timestamp: new Date().toLocaleString('id-ID'),
+                jenjang: 'Kelas 7',
+                noPeserta: 'TES-07',
+                namaSiswa: 'Siswa Uji Coba Kelas 7 (Tes Koneksi)',
+                kelas: 'VII A',
+                benar: 30,
+                salah: 0,
+                nilai: 100,
+                detailJawaban: QUESTIONS.map(q => q.answer)
+            };
+
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(dummyPayload)
+                });
+                fb.textContent = 'Tes koneksi berhasil dikirim! Periksa sheet Rekap_PSAS di Google Spreadsheet Anda, baris "Siswa Uji Coba Kelas 7" seharusnya sudah masuk.';
+                fb.className = 'rounded-xl p-3 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
+            } catch (err) {
+                fb.textContent = 'Gagal terhubung ke URL Apps Script. Pastikan deployment diatur ke "Anyone / Siapa saja".';
+                fb.className = 'rounded-xl p-3 text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200';
+            }
+        }
+
+        function renderTeacherRekapTable() {
+            const records = JSON.parse(localStorage.getItem(STORAGE_KEY_RESULTS) || '[]');
+            document.getElementById('local-records-count').textContent = records.length;
+            const tbody = document.getElementById('rekap-table-body');
+
+            if (records.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-slate-400 text-sm">
+                            Belum ada data siswa kelas VII yang menyelesaikan ujian di perangkat ini.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = records.map(r => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-4 text-xs text-slate-500 whitespace-nowrap">${r.timestamp}</td>
+                    <td class="py-2.5 px-4 font-mono text-xs font-semibold">${r.noPeserta}</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-800">${r.namaSiswa}</td>
+                    <td class="py-2.5 px-4 font-medium text-academic-700">${r.kelas}</td>
+                    <td class="py-2.5 px-4 text-center font-bold text-emerald-600">${r.benar}/30</td>
+                    <td class="py-2.5 px-4 text-center font-extrabold text-slate-900">${r.nilai}</td>
+                    <td class="py-2.5 px-4 text-center">
+                        ${r.synced
+                            ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold">Terkirim</span>'
+                            : '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-semibold">Lokal</span>'
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function clearLocalResults() {
+            localStorage.removeItem(STORAGE_KEY_RESULTS);
+            renderTeacherRekapTable();
+            showToast('Riwayat lokal berhasil dibersihkan.');
+        }
+
+        // SALIN KODE APPS SCRIPT
+        function copyAppsScriptCode() {
+            const textarea = document.getElementById('apps-script-code');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showToast('Kode Google Apps Script berhasil disalin!');
+        }
+
+        // NOTIFIKASI TOAST
+        let toastTimeout;
+        function showToast(message, type = 'success') {
+            const box = document.getElementById('toast-box');
+            const icon = document.getElementById('toast-icon');
+            const text = document.getElementById('toast-text');
+
+            text.textContent = message;
+            if (type === 'warning') {
+                icon.className = 'fa-solid fa-triangle-exclamation text-amber-400 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            }
+
+            box.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add('hidden');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
